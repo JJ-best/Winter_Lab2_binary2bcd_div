@@ -22,7 +22,6 @@ end
 binary2bcd_div ins1(.in_binary(in_binary_), .packed_bcd(packed_bcd_));
 endmodule
 
-
 // combinational block
 module binary2bcd_div (
     input wire [13:0]in_binary,  //14-bit binary(0~16383)
@@ -40,4 +39,5 @@ always @(*) begin
 end
 assign packed_bcd = {digit[3], digit[2], digit[1], digit[0]};
 endmodule
+
 

@@ -48,7 +48,7 @@ initial begin
     wait(rst_n == 1);
     //in_binary = 14'b00_0000_0000_0000;
     for (i = 0; i < LARGE_NUMBER; i = i + 1) begin
-        @(posedge clk) in_binary = in_binary + 1;
+        @(negedge clk) in_binary = in_binary + 1;
         #(4*PERIOD); //needed??
     end
 $finish;
