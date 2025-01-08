@@ -7,7 +7,8 @@ module tb_top_module;
 parameter PERIOD = 10;
 parameter LARGE_NUMBER = 9999;
 
-integer i;
+integer i, j;
+integer error;
 
 //top module input
 reg [13:0] in_binary;
@@ -42,6 +43,12 @@ initial begin
     $dumpvars;
 end
 
+// there you can read data from the solution file,and store in the register.
+reg [15:0] solution [0:9999];
+initial begin
+  $readmemb("solution.dat",solution);
+end
+
 initial begin
     wait(rst_n == 0);
     in_binary = 0;
@@ -51,7 +58,31 @@ initial begin
         @(negedge clk) in_binary = in_binary + 1;
         #(4*PERIOD); //needed??
     end
-$finish;
+
+end
+
+//auto check result
+initial begin
+    error = 0; //error count
+    wait(rst_n == 0);
+    wait(rst_n == 1);
+    for (j = 0; j < LARGE_NUMBER; j = j + 1) begin
+        @(posedge clk) #(PERIOD);
+        if (packed_bcd != solution[j][15:0]) begin
+            error = error + 1;
+            $display("pattern number No.%d is wrong at %t", j, $time);
+            $display("your answer is %b, but the correct answer is %b", packed_bcd, solution[j]);
+        end
+        #(3*PERIOD);
+    end
+
+    if (error == 0) begin
+        $display("Your answer is correct!");
+    end else begin
+        $display("Your answer is wrong!");
+    end
+
+    #(PERIOD)$finish;
 end
 
 
