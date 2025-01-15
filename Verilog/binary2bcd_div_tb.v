@@ -33,7 +33,7 @@ initial begin
     rst_n = 1;
 
     #(PERIOD) rst_n = 0;
-    #(PERIOD) rst_n = 1;
+    #(PERIOD/2) rst_n = 1;
 end
 
 
@@ -55,8 +55,8 @@ initial begin
     wait(rst_n == 1);
     //in_binary = 14'b00_0000_0000_0000;
     for (i = 0; i < LARGE_NUMBER; i = i + 1) begin
-        @(negedge clk) in_binary = in_binary + 1;
-        #(4*PERIOD); //needed??
+        @(posedge clk) in_binary = in_binary + 1;
+        #(4*PERIOD); //make the input waveform same as HLS
     end
 
 end
